@@ -111,7 +111,17 @@ return [
             'advertisement-three' => 'Werbung Drei Bilder',
             'images' => 'Bilder',
             'general' => 'Allgemein',
-            'add-image-btn-title' => 'Bild hinzufügen'
+            'add-image-btn-title' => 'Bild hinzufügen',
+            'footer-middle' => [
+                'about-us'  => 'About Us',
+                'customer-service' => 'Customer Service',
+                'whats-new' => 'What\'s New',
+                'contact-us' => 'Contact Us',
+                'order-and-returns' => 'Order and Returns',
+                'payment-policy' => 'Payment Policy',
+                'shipping-policy' => 'Shipping Policy',
+                'privacy-and-cookies-policy' => 'Privacy and Cookies Policy'
+            ]
         ],
         'category'  => [
             'save-btn-title' => 'Menü speichern',
@@ -223,7 +233,10 @@ return [
             'forgot-password'       => 'Passwort vergessen',
             'recover-password'      => 'Passwort wiederherstellen',
             'recover-password-text' => 'Wenn Sie Ihr Passwort vergessen haben, stellen Sie es durch Eingabe Ihrer E-Mail-Adresse wieder her.',
-        ]
+        ],
+        'wishlist' => [
+            'remove-all-success' => 'Alle Artikel von Ihrer Wunschliste wurden entfernt',
+        ],
     ],
 
     'error'         => [
@@ -251,6 +264,7 @@ return [
         'short-description' => 'Kurze Beschreibungen',
         'recently-viewed'   => 'Kürzlich angesehene Produkte',
         'be-first-review'   => 'Sei der erste der eine Bewertung schreibt',
+        'tax-inclusive'     => 'Inclusive of all taxes',
     ],
 
     'shop'          => [

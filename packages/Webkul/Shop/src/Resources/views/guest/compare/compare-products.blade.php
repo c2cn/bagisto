@@ -3,7 +3,7 @@
     $comparableAttributes = $attributeRepository->getComparableAttributesBelongsToFamily();
 
     $locale = request()->get('locale') ?: app()->getLocale();
-    
+
     $attributeOptionTranslations = DB::table('attribute_option_translations')->where('locale', $locale)->get()->toJson();
 @endphp
 
@@ -16,7 +16,7 @@
 
             <button
                 v-if="products.length > 0"
-                class="btn btn-primary btn-md pull-right"
+                class="btn btn-primary btn-md {{ core()->getCurrentLocale()->direction == 'rtl' ? 'pull-left' : 'pull-right' }}"
                 @click="removeProductCompare('all')">
                 {{ __('shop::app.customer.account.wishlist.deleteall') }}
             </button>
@@ -49,7 +49,7 @@
                                 @switch ($attribute['code'])
                                     @case('name')
                                         <a :href="`${baseUrl}/${product.url_key}`" class="unset remove-decoration active-hover">
-                                            <h3 class="fw6 fs18" v-text="product['{{ $attribute['code'] }}']"></h3>
+                                            <h3 class="fw6 fs18 mt-0" v-text="product['{{ $attribute['code'] }}']"></h3>
                                         </a>
                                         @break
 
@@ -58,7 +58,7 @@
                                             <img
                                                 class="image-wrapper"
                                                 :src="product['{{ $attribute['code'] }}']"
-                                                :onerror="`this.src='${baseUrl}/vendor/webkul/ui/assets/images/product/large-product-placeholder.png'`" />
+                                                :onerror="`this.src='${baseUrl}/vendor/webkul/ui/assets/images/product/large-product-placeholder.png'`" alt="" />
                                         </a>
                                         @break
 
@@ -68,7 +68,7 @@
 
                                     @case('addToCartHtml')
                                         <div class="action">
-                                            <div v-html="product.defaultAddToCart"></div>
+                                            <div v-html="product.addToCartHtml"></div>
 
                                             <span class="icon white-cross-sm-icon remove-product" @click="removeProductCompare(product.id)"></span>
                                         </div>
@@ -83,7 +83,7 @@
                                         @break
 
                                     @case('description')
-                                        <span v-html="product.description"></span>
+                                        <span v-html="product.description" class="desc"></span>
                                         @break
 
                                     @default
@@ -112,7 +112,7 @@
                                                     <img
                                                         class="image-wrapper"
                                                         :src="'storage/' + product.product['{{ $attribute['code'] }}']"
-                                                        :onerror="`this.src='${baseUrl}/vendor/webkul/ui/assets/images/product/large-product-placeholder.png'`" />
+                                                        :onerror="`this.src='${baseUrl}/vendor/webkul/ui/assets/images/product/large-product-placeholder.png'`" alt="" />
                                                 </a>
                                                 @break;
                                             @default
@@ -122,7 +122,7 @@
 
                                         @break
 
-                                @endswitch 
+                                @endswitch
                             </td>
                         </tr>
                     @endforeach
@@ -326,7 +326,7 @@
                                 'type': `alert-error`,
                                 'message': "{{ __('shop::app.common.error') }}"
                             }];
-                            
+
                             this.$root.addFlashMessages();
                         });
                     } else {

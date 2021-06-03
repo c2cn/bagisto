@@ -17,7 +17,7 @@ return [
             'provider' => 'customers',
         ],
 
-        'customer' =>[
+        'customer' => [
             'driver' => 'session',
             'provider' => 'customers'
         ],
@@ -28,7 +28,7 @@ return [
         ],
 
         'admin-api' => [
-            'driver' => 'token',
+            'driver' => 'jwt',
             'provider' => 'admins',
         ]
     ],

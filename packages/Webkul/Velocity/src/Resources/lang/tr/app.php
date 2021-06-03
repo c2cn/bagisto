@@ -111,7 +111,17 @@ return [
             'advertisement-three' => 'Üç Görselli Reklam',
             'images' => 'Görseller',
             'general' => 'Genel',
-            'add-image-btn-title' => 'Görsel Ekle'
+            'add-image-btn-title' => 'Görsel Ekle',
+            'footer-middle' => [
+                'about-us'  => 'About Us',
+                'customer-service' => 'Customer Service',
+                'whats-new' => 'What\'s New',
+                'contact-us' => 'Contact Us',
+                'order-and-returns' => 'Order and Returns',
+                'payment-policy' => 'Payment Policy',
+                'shipping-policy' => 'Shipping Policy',
+                'privacy-and-cookies-policy' => 'Privacy and Cookies Policy'
+            ]
         ],
         'category'  => [
             'save-btn-title' => 'Menü Kaydet',
@@ -221,7 +231,10 @@ return [
             'forgot-password'       => 'Parolamı Unuttum',
             'recover-password'      => 'Parolamı Yenile',
             'recover-password-text' => 'Parolanızı unuttuysanız, mail adresinizi girerek yeni parola talebinde bulunun.',
-        ]
+        ],
+        'wishlist' => [
+            'remove-all-success' => 'İstek listenizdeki tüm öğeler kaldırıldı',
+        ],
     ],
 
     'error'         => [
@@ -249,6 +262,7 @@ return [
         'short-description' => 'Kısa Açıklamalar',
         'recently-viewed'   => 'En Son Gezdiğiniz Ürünler',
         'be-first-review'   => 'Bu ürüne ilk siz inceleme girin!',
+        'tax-inclusive'     => 'Inclusive of all taxes',
     ],
 
     'shop'          => [

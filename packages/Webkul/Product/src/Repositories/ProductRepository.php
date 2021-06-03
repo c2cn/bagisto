@@ -5,12 +5,14 @@ namespace Webkul\Product\Repositories;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Webkul\Checkout\Facades\Cart;
 use Webkul\Product\Models\Product;
 use Illuminate\Pagination\Paginator;
 use Webkul\Core\Eloquent\Repository;
 use Illuminate\Support\Facades\Event;
 use Webkul\Attribute\Models\Attribute;
 use Webkul\Product\Models\ProductFlat;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Container\Container as App;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Webkul\Product\Models\ProductAttributeValueProxy;
@@ -110,8 +112,25 @@ class ProductRepository extends Repository
         Event::dispatch('catalog.product.delete.after', $id);
     }
 
-    /**
+     /**
      * @param int $categoryId
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getProductsRelatedToCategory($categoryId = null)
+    {
+        $qb = $this->model
+            ->leftJoin('product_categories', 'products.id', '=', 'product_categories.product_id');
+
+        if ($categoryId) {
+            $qb->where('product_categories.category_id', $categoryId);
+        }
+
+        return $qb->get();
+    }
+
+    /**
+     * @param string $categoryId
      *
      * @return \Illuminate\Support\Collection
      */
@@ -144,7 +163,11 @@ class ProductRepository extends Repository
                 ->whereNotNull('product_flat.url_key');
 
             if ($categoryId) {
-                $qb->where('product_categories.category_id', $categoryId);
+                $qb->whereIn('product_categories.category_id', explode(',', $categoryId));
+            }
+
+            if (! core()->getConfigData('catalog.products.homepage.out_of_stock_items')) {
+                $qb = $this->checkOutOfStockItem($qb);
             }
 
             if (is_null(request()->input('status'))) {
@@ -155,8 +178,19 @@ class ProductRepository extends Repository
                 $qb->where('product_flat.visible_individually', 1);
             }
 
-            if (isset($params['search']))
+            if (isset($params['search'])) {
                 $qb->where('product_flat.name', 'like', '%' . urldecode($params['search']) . '%');
+            }
+
+            /* added for api as per the documentation */
+            if (isset($params['name'])) {
+                $qb->where('product_flat.name', 'like', '%' . urldecode($params['name']) . '%');
+            }
+
+            /* added for api as per the documentation */
+            if (isset($params['url_key'])) {
+                $qb->where('product_flat.url_key', 'like', '%' . urldecode($params['url_key']) . '%');
+            }
 
             # sort direction
             $orderDirection = 'asc';
@@ -179,8 +213,40 @@ class ProductRepository extends Repository
             if ($priceFilter = request('price')) {
                 $priceRange = explode(',', $priceFilter);
                 if (count($priceRange) > 0) {
-                    $qb->where('variants.min_price', '>=', core()->convertToBasePrice($priceRange[0]));
-                    $qb->where('variants.min_price', '<=', core()->convertToBasePrice(end($priceRange)));
+
+                    $customerGroupId = null;
+
+                    if (Cart::getCurrentCustomer()->check()) {
+                        $customerGroupId = Cart::getCurrentCustomer()->user()->customer_group_id;
+                    } else {
+                        $customerGuestGroup = app('Webkul\Customer\Repositories\CustomerGroupRepository')->getCustomerGuestGroup();
+
+                        if ($customerGuestGroup) {
+                            $customerGroupId = $customerGuestGroup->id;
+                        }
+                    }
+
+                    $qb
+                        ->leftJoin('catalog_rule_product_prices', 'catalog_rule_product_prices.product_id', '=', 'variants.product_id')
+                        ->leftJoin('product_customer_group_prices', 'product_customer_group_prices.product_id', '=', 'variants.product_id')
+                        ->where(function ($qb) use ($priceRange, $customerGroupId) {
+                            $qb->where(function ($qb) use ($priceRange){
+                                $qb
+                                    ->where('variants.min_price', '>=',  core()->convertToBasePrice($priceRange[0]))
+                                    ->where('variants.min_price', '<=',  core()->convertToBasePrice(end($priceRange)));
+                            })
+                            ->orWhere(function ($qb) use ($priceRange) {
+                                $qb
+                                    ->where('catalog_rule_product_prices.price', '>=',  core()->convertToBasePrice($priceRange[0]))
+                                    ->where('catalog_rule_product_prices.price', '<=',  core()->convertToBasePrice(end($priceRange)));
+                            })
+                            ->orWhere(function ($qb) use ($priceRange, $customerGroupId) {
+                                $qb
+                                    ->where('product_customer_group_prices.value', '>=',  core()->convertToBasePrice($priceRange[0]))
+                                    ->where('product_customer_group_prices.value', '<=',  core()->convertToBasePrice(end($priceRange)))
+                                    ->where('product_customer_group_prices.customer_group_id', '=', $customerGroupId);
+                            });
+                        });
                 }
             }
 
@@ -306,6 +372,8 @@ class ProductRepository extends Repository
      */
     public function getNewProducts()
     {
+        $count = core()->getConfigData('catalog.products.homepage.no_of_new_product_homepage');
+
         $results = app(ProductFlatRepository::class)->scopeQuery(function ($query) {
             $channel = request()->get('channel') ?: (core()->getCurrentChannelCode() ?: core()->getDefaultChannelCode());
 
@@ -319,7 +387,7 @@ class ProductRepository extends Repository
                 ->where('product_flat.channel', $channel)
                 ->where('product_flat.locale', $locale)
                 ->inRandomOrder();
-        })->paginate(4);
+        })->paginate($count ? $count : 4);
 
         return $results;
     }
@@ -331,6 +399,8 @@ class ProductRepository extends Repository
      */
     public function getFeaturedProducts()
     {
+        $count = core()->getConfigData('catalog.products.homepage.no_of_featured_product_homepage');
+
         $results = app(ProductFlatRepository::class)->scopeQuery(function ($query) {
             $channel = request()->get('channel') ?: (core()->getCurrentChannelCode() ?: core()->getDefaultChannelCode());
 
@@ -344,7 +414,7 @@ class ProductRepository extends Repository
                 ->where('product_flat.channel', $channel)
                 ->where('product_flat.locale', $locale)
                 ->inRandomOrder();
-        })->paginate(4);
+        })->paginate($count ? $count : 4);
 
         return $results;
     }
@@ -395,6 +465,11 @@ class ProductRepository extends Repository
                 ->paginate(16);
         } else {
             $results = app(ProductFlatRepository::class)->scopeQuery(function ($query) use ($term, $channel, $locale) {
+
+                if (! core()->getConfigData('catalog.products.homepage.out_of_stock_items')) {
+                    $query = $this->checkOutOfStockItem($query);
+                }
+
                 return $query->distinct()
                     ->addSelect('product_flat.*')
                     ->where('product_flat.status', 1)
@@ -537,8 +612,11 @@ class ProductRepository extends Repository
             if ($attribute->code === 'price') {
                 $query->orderBy('min_price', $direction);
             } else {
-                $query->orderBy($sort === 'created_at' ? 'product_flat.created_at' : $attribute->code, $direction);
+                $query->orderBy($attribute->code, $direction);
             }
+        } else {
+            /* `created_at` is not an attribute so it will be in else case */
+            $query->orderBy('product_flat.created_at', $direction);
         }
 
         return $query;
@@ -582,7 +660,7 @@ class ProductRepository extends Repository
     {
         $ids = [];
 
-        foreach (['name', 'sku', 'status', 'url_key'] as $code) {
+        foreach (['name', 'sku', 'product_number', 'status', 'url_key'] as $code) {
             $ids[$code] = Attribute::query()->where(['code' => $code])->firstOrFail()->id;
         }
 
@@ -643,6 +721,18 @@ class ProductRepository extends Repository
                 $newProductFlat->sku = $copiedProduct->sku;
             }
 
+            // change product number
+            if ($oldValue->attribute_id === $attributeIds['product_number']) {
+                $copyProductNumber = trans('admin::app.copy-of-slug');
+                $copiedProductNumber = sprintf('%s%s-%s',
+                    Str::startsWith($originalProduct->product_number, $copyProductNumber) ? '' : $copyProductNumber,
+                    $originalProduct->product_number,
+                    $randomSuffix
+                );
+                $newValue->text_value = $copiedProductNumber;
+                $newProductFlat->product_number = $copiedProductNumber;
+            }
+
             // force the copied product to be inactive so the admin can adjust it before release
             if ($oldValue->attribute_id === $attributeIds['status']) {
                 $newValue->boolean_value = 0;
@@ -687,7 +777,17 @@ class ProductRepository extends Repository
 
         if (! in_array('images', $attributesToSkip)) {
             foreach ($originalProduct->images as $image) {
-                $copiedProduct->images()->save($image->replicate());
+                $copiedProductImage = $copiedProduct->images()->save($image->replicate());
+
+                $this->copyProductImageVideo($image, $copiedProduct, $copiedProductImage);
+            }
+        }
+
+        if (! in_array('videos', $attributesToSkip)) {
+            foreach ($originalProduct->videos as $video) {
+                $copiedProductVideo = $copiedProduct->videos()->save($video->replicate());
+
+                $this->copyProductImageVideo($video, $copiedProduct, $copiedProductVideo);
             }
         }
 
@@ -717,5 +817,58 @@ class ProductRepository extends Repository
                 'child_id'  => $copiedProduct->id,
             ]);
         }
+    }
+
+    /**
+     * @object $data
+     * @object $copiedProduct
+     * @object $copiedProductImageVideo
+     */
+    private function copyProductImageVideo($data, $copiedProduct, $copiedProductImageVideo): void
+    {
+        $path = explode("/", $data->path);
+
+        $path = 'product/' . $copiedProduct->id .'/'. end($path);
+
+        $copiedProductImageVideo->path = $path;
+
+        $copiedProductImageVideo->save();
+
+        Storage::makeDirectory('product/' . $copiedProduct->id);
+
+        Storage::copy($data->path, $copiedProductImageVideo->path);
+    }
+
+    /**
+     * Check out of stock items.
+     *
+     * @param Webkul\Product\Models\ProductFlat
+     *
+     * @return Model
+    */
+    public function checkOutOfStockItem($query) {
+        return $query
+            ->leftJoin('products as ps', 'product_flat.product_id', '=', 'ps.id')
+            ->leftJoin('product_inventories as pv', 'product_flat.product_id', '=', 'pv.product_id')
+            ->where(function ($qb) {
+                return $qb
+                    /* for grouped, downloadable, bundle and booking product */
+                    ->orWhereIn('ps.type', ['grouped', 'downloadable', 'bundle', 'booking'])
+                    /* for simple and virtual product */
+                    ->orWhere(function ($qb) {
+                        return $qb->whereIn('ps.type', ['simple', 'virtual'])->where('pv.qty', '>', 0);
+                    })
+                    /* for configurable product */
+                    ->orWhere(function ($qb) {
+                        return $qb->where('ps.type', 'configurable')->where(function ($qb) {
+                            return $qb
+                                ->selectRaw('SUM(' . DB::getTablePrefix() . 'product_inventories.qty)')
+                                ->from('product_flat')
+                                ->leftJoin('product_inventories', 'product_inventories.product_id', '=', 'product_flat.product_id')
+                                ->join('product_flat as variants', 'product_flat.id', '=', DB::raw('COALESCE(' . DB::getTablePrefix() . 'variants.parent_id, ' . DB::getTablePrefix() . 'variants.id)'))
+                                ->whereRaw(DB::getTablePrefix() . 'product_flat.parent_id = variants.id');
+                        }, '>', 0);
+                    });
+            });
     }
 }

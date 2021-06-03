@@ -1,5 +1,3 @@
-@inject ('productImageHelper', 'Webkul\Product\Helpers\ProductImage')
-
 <?php $cart = cart()->getCart(); ?>
 
 @if ($cart)
@@ -27,7 +25,11 @@
 
                         {!! view_render_event('bagisto.shop.checkout.cart-mini.subtotal.before', ['cart' => $cart]) !!}
 
-                        <b>{{ core()->currency($cart->base_sub_total) }}</b>
+                        @if (Webkul\Tax\Helpers\Tax::isTaxInclusive())
+                            <b>{{ core()->currency($cart->base_grand_total) }}</b>
+                        @else
+                            <b>{{ core()->currency($cart->base_sub_total) }}</b>
+                        @endif
 
                         {!! view_render_event('bagisto.shop.checkout.cart-mini.subtotal.after', ['cart' => $cart]) !!}
                     </p>
@@ -41,7 +43,7 @@
                                 @php
                                     $images = $item->product->getTypeInstance()->getBaseImage($item);
                                 @endphp
-                                <img src="{{ $images['small_image_url'] }}" />
+                                <img src="{{ $images['small_image_url'] }}"  alt=""/>
                             </div>
 
                             <div class="item-details">
@@ -69,7 +71,13 @@
 
                                 {!! view_render_event('bagisto.shop.checkout.cart-mini.item.price.before', ['item' => $item]) !!}
 
-                                <div class="item-price"><b>{{ core()->currency($item->base_total) }}</b></div>
+                                <div class="item-price">
+                                    @if (Webkul\Tax\Helpers\Tax::isTaxInclusive())
+                                        <b>{{ core()->currency($item->base_total + $item->tax_amount) }}</b>
+                                    @else
+                                        <b>{{ core()->currency($item->base_total) }}</b>
+                                    @endif
+                                </div>
 
                                 {!! view_render_event('bagisto.shop.checkout.cart-mini.item.price.after', ['item' => $item]) !!}
 
@@ -88,7 +96,18 @@
                 <div class="dropdown-footer">
                     <a href="{{ route('shop.checkout.cart.index') }}">{{ __('shop::app.minicart.view-cart') }}</a>
 
-                    <a class="btn btn-primary btn-lg" style="color: white;" href="{{ route('shop.checkout.onepage.index') }}">{{ __('shop::app.minicart.checkout') }}</a>
+                    @php
+                        $minimumOrderAmount = (float) core()->getConfigData('sales.orderSettings.minimum-order.minimum_order_amount') ?? 0;
+                    @endphp
+
+                    <proceed-to-checkout
+                        href="{{ route('shop.checkout.onepage.index') }}"
+                        add-class="btn btn-primary btn-lg"
+                        text="{{ __('shop::app.minicart.checkout') }}"
+                        is-minimum-order-completed="{{ $cart->checkMinimumOrder() }}"
+                        minimum-order-message="{{ __('shop::app.checkout.cart.minimum-order-message', ['amount' => core()->currency($minimumOrderAmount)]) }}"
+                        style="color: white;">
+                    </proceed-to-checkout>
                 </div>
             </div>
         </div>

@@ -63,11 +63,9 @@ Take advantage of two of the hottest frameworks used in this project -- Laravel 
 
 ### Requirements
 
-* **OS**: Ubuntu 16.04 LTS or higher / Windows 7 or Higher (WampServer / XAMPP).
 * **SERVER**: Apache 2 or NGINX.
 * **RAM**: 3 GB or higher.
-* **PHP**: 7.2.0 or higher.
-* **Processor**: Clock Cycle 1 Ghz or higher.
+* **PHP**: 7.3 or higher.
 * **For MySQL users**: 5.7.23 or higher.
 * **For MariaDB users**: 10.2.7 or Higher.
 * **Node**: 8.11.3 LTS or higher.
@@ -84,13 +82,7 @@ Take advantage of two of the hottest frameworks used in this project -- Laravel 
 ##### b. Extract the contents of zip and execute the project in your browser:
 
 ~~~
-http(s)://localhost/bagisto/public
-~~~
-
-or
-
-~~~
-http(s)://example.com/public
+http(s)://example.com
 ~~~
 
 **2. Or you can install Bagisto from your console.**
@@ -98,7 +90,7 @@ http(s)://example.com/public
 ##### Execute these commands below, in order
 
 ~~~
-1. composer create-project bagisto/bagisto-standard
+1. composer create-project bagisto/bagisto
 ~~~
 
 ~~~
@@ -165,4 +157,14 @@ Thank you to all our backers! 🙏
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website.
 
-<a href="https://opencollective.com/bagisto/contribute/sponsor-7372/checkout" target="_blank"><img src="https://images.opencollective.com/static/images/become_sponsor.svg"></a>
+<div>
+    <a href="https://opencollective.com/bagisto/contribute/sponsor-7372/checkout" target="_blank">
+        <img src="https://images.opencollective.com/static/images/become_sponsor.svg">
+    </a>
+</div>
+
+<kbd>
+    <a href="http://e.ventures/" target="_blank">
+        <img src="https://images.opencollective.com/e-ventures1/7d61db2/logo.png" height="75">
+    </a>
+</kbd>

@@ -17,6 +17,7 @@ return [
 
     'common' => [
         'error' => 'حدث خطأ. الرجاء المحاولة لاحقاً.',
+        'image-upload-limit' => 'أقصى حجم لتحميل الصورة هو 2 ميغا بايت',
         'no-result-found' => 'لا توجد نتائج.'
     ],
 
@@ -72,7 +73,8 @@ return [
         'page-title' => 'بحث',
         'found-results' => 'تم العثور على نتائج البحث',
         'found-result' => 'تم العثور على نتيجة البحث',
-        'analysed-keywords' => 'Analysed Keywords'
+        'analysed-keywords' => 'الكلمات الأساسية التي تم تحليلها',
+        'image-search-option' => 'خيار البحث عن الصور'
     ],
 
     'reviews' => [
@@ -261,11 +263,14 @@ return [
                     'submit' => 'احفظ العنوان',
                     'success' => 'العنوان تم تحديثه بنجاح.'
                 ],
+
                 'delete' => [
                     'success' => 'تم حذف العنوان بنجاح.',
                     'failure' => 'لا يمكن حذف العنوان',
                     'wrong-password' => 'كلمة مرور خاطئة !'
-                ]
+                ],
+
+                'default-address' => 'Default Address',
             ],
 
             'order' => [
@@ -372,7 +377,8 @@ return [
                 'expired' => 'منتهية الصلاحية',
                 'remaining-downloads' => 'التنزيلات المتبقية',
                 'unlimited' => 'غير محدود',
-                'download-error' => 'انتهت صلاحية رابط التنزيل.'
+                'download-error' => 'انتهت صلاحية رابط التنزيل.',
+                'payment-error' => 'Payment has not been done for this download.'
             ],
 
             'review' => [
@@ -439,7 +445,10 @@ return [
         'none' => 'لا شيء',
         'available-for-order' => 'متوفر لطلب الشراء',
         'settings' => 'Settings',
-        'compare_options' => 'Compare Options',
+        'compare_options' => 'قارن الخيارات',
+        'wishlist-options' => 'Wishlist Options',
+        'offers' => 'Buy :qty for :price each and save :discount%',
+        'tax-inclusive' => 'Inclusive of all taxes',
     ],
 
     // 'reviews' => [
@@ -484,6 +493,8 @@ return [
                 'success' => 'تم بنجاح إضافة العنصر إلى العربة',
                 'success-remove' => 'تم إزالة العنصر بنجاح من العربة',
                 'error-add' => 'لا يمكن إضافة العنصر إلى العربة ، رجاء حاول مرة أخرى ',
+                'inactive' => 'An item is inactive and was removed from cart',
+                'inactive-add' => 'Inactive item cannot be added to cart',
             ],
             'quantity-error' => 'الكمية المطلوبة غير متوفرة',
             'cart-subtotal' => 'المجموع الفرعي للمشتريات',
@@ -492,7 +503,8 @@ return [
             'link-missing' => '',
             'event' => [
                 'expired' => 'This event has been expired.'
-            ]
+            ],
+            'minimum-order-message' => 'Minimum order amount is :amount'
         ],
 
         'onepage' => [

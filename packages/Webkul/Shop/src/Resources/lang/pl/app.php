@@ -17,6 +17,7 @@ return [
 
     'common' => [
         'error' => 'Coś poszło nie tak. Proszę spróbować później.',
+        'image-upload-limit' => 'Maksymalny rozmiar przesyłanego obrazu to 2 MB',
         'no-result-found' => 'Nie znaleźliśmy żadnych zapisów.'
     ],
 
@@ -72,7 +73,8 @@ return [
         'page-title' => config('app.name') . ' - Szukaj',
         'found-results' => 'Dostępne wyniki wyszukiwania',
         'found-result' => 'Dostępny wynik wyszukiwania',
-        'analysed-keywords' => 'Analysed Keywords'
+        'analysed-keywords' => 'Analysed Keywords',
+        'image-search-option' => 'Image Search Option'
     ],
 
     'reviews' => [
@@ -259,11 +261,14 @@ return [
                     'submit' => 'Zapisz adres',
                     'success' => 'Adres został zaktualizowany pomyślnie.',
                 ],
+
                 'delete' => [
                     'success' => 'Adres został usunięty pomyślnie.',
                     'failure' => 'Nie można usunąć adresu',
                     'wrong-password' => 'Błędne hasło!'
-                ]
+                ],
+
+                'default-address' => 'Default Address',
             ],
 
             'order' => [
@@ -370,7 +375,8 @@ return [
                 'expired' => 'wygasł',
                 'remaining-downloads' => 'Pozostałe pliki do pobrania',
                 'unlimited' => 'Bez limitu',
-                'download-error' => 'Link do pobrania wygasł.'
+                'download-error' => 'Link do pobrania wygasł.',
+                'payment-error' => 'Payment has not been done for this download.'
             ],
 
             'review' => [
@@ -437,6 +443,9 @@ return [
         'available-for-order' => 'Dostępne na zamówienie',
         'settings' => 'Settings',
         'compare_options' => 'Compare Options',
+        'wishlist-options' => 'Wishlist Options',
+        'offers' => 'Buy :qty for :price each and save :discount%',
+        'tax-inclusive' => 'Inclusive of all taxes',
     ],
 
     // 'reviews' => [
@@ -481,6 +490,8 @@ return [
                 'success' => 'Produkt został pomyślnie dodany do koszyka.',
                 'success-remove' => 'Produkt został pomyślnie usunięty z koszyka.',
                 'error-add' => 'Nie można dodać produktu do koszyka, spróbuj ponownie później.',
+                'inactive' => 'An item is inactive and was removed from cart.',
+                'inactive-add' => 'Inactive item cannot be added to cart.',
             ],
             'quantity-error' => 'Żądana ilość nie jest dostępna.',
             'cart-subtotal' => 'Suma częściowa koszyka',
@@ -488,7 +499,8 @@ return [
             'partial-cart-update' => 'Tylko niektóre produkty zostały zaktualizowane',
             'event' => [
                 'expired' => 'To wydarzenie wygasło.'
-            ]
+            ],
+            'minimum-order-message' => 'Minimum order amount is :amount'
         ],
 
         'onepage' => [

@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'admin_url' => env('APP_ADMIN_URL', 'admin'),    
+    'admin_url' => env('APP_ADMIN_URL', 'admin'),
 
     /*
     |--------------------------------------------------------------------------
@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE','Asia/Kolkata'),
+    'timezone' => env('APP_TIMEZONE', 'Asia/Kolkata'),
 
     /*
     |--------------------------------------------------------------------------
@@ -128,7 +128,7 @@ return [
     | Here you may specify the base currency code for your application.
     |
     */
-    
+
     'currency' => env('APP_CURRENCY', 'USD'),
 
     /*
@@ -160,7 +160,7 @@ return [
     /*
         Code Editor
     */
-    'editor' =>'vscode',
+    'editor' => 'vscode',
 
     /*
         Application Version
@@ -246,8 +246,6 @@ return [
         //Laravel Maatwebsite
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
-        Barryvdh\Debugbar\ServiceProvider::class,
-
         //Repository
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Konekt\Concord\ConcordServiceProvider::class,
@@ -263,6 +261,7 @@ return [
         Webkul\Category\Providers\CategoryServiceProvider::class,
         Webkul\Attribute\Providers\AttributeServiceProvider::class,
         Webkul\Core\Providers\CoreServiceProvider::class,
+        Webkul\Core\Providers\EnvValidatorServiceProvider::class,
         Webkul\Shop\Providers\ShopServiceProvider::class,
         Webkul\Customer\Providers\CustomerServiceProvider::class,
         Webkul\Inventory\Providers\InventoryServiceProvider::class,
@@ -281,6 +280,8 @@ return [
         Webkul\Velocity\Providers\VelocityServiceProvider::class,
         Webkul\BookingProduct\Providers\BookingProductServiceProvider::class,
         Webkul\SocialLogin\Providers\SocialLoginServiceProvider::class,
+        Webkul\DebugBar\Providers\DebugBarServiceProvider::class,
+        Webkul\Marketing\Providers\MarketingServiceProvider::class,
     ],
 
     /*
@@ -338,6 +339,9 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Concord' => Konekt\Concord\Facades\Concord::class,
-        'Helper'  => Konekt\Concord\Facades\Helper::class
+        'Helper'  => Konekt\Concord\Facades\Helper::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'ProductImage' => Webkul\Product\Facades\ProductImage::class,
+        'ProductVideo' => Webkul\Product\Facades\ProductVideo::class
     ],
 ];

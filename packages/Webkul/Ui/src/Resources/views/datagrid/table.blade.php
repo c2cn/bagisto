@@ -1,3 +1,24 @@
+@php
+    /* all locales */
+    $locales = core()->getAllLocales();
+
+    /* request and fallback handling */
+    $locale = request()->get('locale') ?: app()->getLocale();
+    $channel = request()->get('channel') ?: (core()->getCurrentChannelCode() ?: core()->getDefaultChannelCode());
+    $customer_group = request()->get('customer_group');
+
+    /* handling cases for new locale if not present in current channel */
+    if ($channel !== 'all') {
+        $channelLocales = app('Webkul\Core\Repositories\ChannelRepository')->findOneByField('code', $channel)->locales;
+
+        if ($channelLocales->contains('code', $locale)) {
+            $locales = $channelLocales;
+        } else {
+            $channel = 'all';
+        }
+    }
+@endphp
+
 <div class="table">
     <datagrid-filters></datagrid-filters>
 
@@ -21,9 +42,9 @@
                                     </option>
                                     @foreach ($results['extraFilters']['channels'] as $channelModel)
                                         <option
-                                            value="{{ $channelModel->id }}"
-                                            {{ (isset($channel) && ($channelModel->id) == $channel) ? 'selected' : '' }}>
-                                            {{ $channelModel->name }}
+                                            value="{{ $channelModel->code }}"
+                                            {{ (isset($channel) && ($channelModel->code) == $channel) ? 'selected' : '' }}>
+                                            {{ core()->getChannelName($channelModel) }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -39,7 +60,7 @@
                                     <option value="all" {{ ! isset($locale) ? 'selected' : '' }}>
                                         {{ __('admin::app.admin.system.all-locales') }}
                                     </option>
-                                    @foreach ($results['extraFilters']['locales'] as $localeModel)
+                                    @foreach ($locales as $localeModel)
                                         <option
                                             value="{{ $localeModel->code }}" {{ (isset($locale) && ($localeModel->code) == $locale) ? 'selected' : '' }}>
                                             {{ $localeModel->name }}
@@ -95,11 +116,7 @@
 
                                 <select id="perPage" name="perPage" class="control" v-model="perPage"
                                         v-on:change="paginate">
-                                    <option value="10"> 10</option>
-                                    <option value="20"> 20</option>
-                                    <option value="30"> 30</option>
-                                    <option value="40"> 40</option>
-                                    <option value="50"> 50</option>
+                                    <option v-for="index in this.perPageProduct" :key="index" :value="index"> @{{ index }} </option>
                                 </select>
                             </div>
                         </div>
@@ -266,6 +283,7 @@
                         massActions: @json($results['massactions']),
                         massActionsToggle: false,
                         massActionTarget: null,
+                        massActionConfirmText: '{{ __('ui::app.datagrid.click_on_action') }}',
                         massActionType: null,
                         massActionValues: [],
                         massActionTargets: [],
@@ -299,7 +317,8 @@
                         booleanConditionSelect: false,
                         numberConditionSelect: false,
                         datetimeConditionSelect: false,
-                        perPage: 10,
+                        perPage: {{ $results['itemsPerPage'] ?: 10 }},
+                        perPageProduct: [10, 20, 30, 40, 50],
                         extraFilters: @json($results['extraFilters']),
                     }
                 },
@@ -313,6 +332,10 @@
                                 this.perPage = this.filters[i].val;
                             }
                         }
+                    }
+
+                    if (this.perPageProduct.indexOf(parseInt(this.perPage)) === -1) {
+                        this.perPageProduct.unshift(this.perPage);
                     }
                 },
 
@@ -385,7 +408,7 @@
                     },
 
                     filterNumberInput: function(e){
-                        this.numberValue = e.target.value.replace(/[^0-9\,\.]+/g, '');                            
+                        this.numberValue = e.target.value.replace(/[^0-9\,\.]+/g, '');
                     },
 
                     getResponse: function() {
@@ -451,7 +474,8 @@
                         for (let id in this.massActions) {
                             targetObj = {
                                 'type': this.massActions[id].type,
-                                'action': this.massActions[id].action
+                                'action': this.massActions[id].action,
+                                'confirm_text': this.massActions[id].confirm_text
                             };
 
                             this.massActionTargets.push(targetObj);
@@ -477,6 +501,7 @@
                             for (let i in this.massActionTargets) {
                                 if (this.massActionTargets[i].type === 'delete') {
                                     this.massActionTarget = this.massActionTargets[i].action;
+                                    this.massActionConfirmText = this.massActionTargets[i].confirm_text ? this.massActionTargets[i].confirm_text : this.massActionConfirmText;
 
                                     break;
                                 }
@@ -487,6 +512,7 @@
                             for (let i in this.massActionTargets) {
                                 if (this.massActionTargets[i].type === 'update') {
                                     this.massActionTarget = this.massActionTargets[i].action;
+                                    this.massActionConfirmText = this.massActionTargets[i].confirm_text ? this.massActionTargets[i].confirm_text : this.massActionConfirmText;
 
                                     break;
                                 }
@@ -704,19 +730,31 @@
                                 case "channel":
                                     obj.label = "Channel";
                                     if ('channels' in this.extraFilters) {
-                                        obj.prettyValue = this.extraFilters['channels'].find(channel => channel.id == obj.val).name
+                                        obj.prettyValue = this.extraFilters['channels'].find(channel => channel.code == obj.val);
+
+                                        if (obj.prettyValue !== undefined) {
+                                            obj.prettyValue = obj.prettyValue.name;
+                                        }
                                     }
                                     break;
                                 case "locale":
                                     obj.label = "Locale";
                                     if ('locales' in this.extraFilters) {
-                                        obj.prettyValue = this.extraFilters['locales'].find(locale => locale.code === obj.val).name
+                                        obj.prettyValue = this.extraFilters['locales'].find(locale => locale.code === obj.val);
+
+                                        if (obj.prettyValue !== undefined) {
+                                            obj.prettyValue = obj.prettyValue.name;
+                                        }
                                     }
                                     break;
                                 case "customer_group":
                                     obj.label = "Customer Group";
                                     if ('customer_groups' in this.extraFilters) {
-                                        obj.prettyValue = this.extraFilters['customer_groups'].find(customer_group => customer_group.id === parseInt(obj.val, 10)).name
+                                        obj.prettyValue = this.extraFilters['customer_groups'].find(customer_group => customer_group.id === parseInt(obj.val, 10));
+
+                                        if (obj.prettyValue !== undefined) {
+                                            obj.prettyValue = obj.prettyValue.name;
+                                        }
                                     }
                                     break;
                                 case "sort":
@@ -810,31 +848,6 @@
                         }
                     },
 
-                    doAction: function (e) {
-                        var element = e.currentTarget;
-
-                        if (confirm('{{__('ui::app.datagrid.massaction.delete') }}')) {
-                            axios.post(element.getAttribute('data-action'), {
-                                _token: element.getAttribute('data-token'),
-                                _method: element.getAttribute('data-method')
-                            }).then(function (response) {
-                                this.result = response;
-
-                                if (response.data.redirect) {
-                                    window.location.href = response.data.redirect;
-                                } else {
-                                    location.reload();
-                                }
-                            }).catch(function (error) {
-                                location.reload();
-                            });
-
-                            e.preventDefault();
-                        } else {
-                            e.preventDefault();
-                        }
-                    },
-
                     captureColumn: function (id) {
                         element = document.getElementById(id);
 
@@ -863,6 +876,37 @@
                     }
                 }
             });
+
+
+            function doAction(e, message, type) {
+                var element = e.currentTarget;
+                if (message) {
+                    element = e.target.parentElement;
+                }
+
+                message = message || '{{__('ui::app.datagrid.massaction.delete') }}';
+
+                if (confirm(message)) {
+                    axios.post(element.getAttribute('data-action'), {
+                        _token: element.getAttribute('data-token'),
+                        _method: element.getAttribute('data-method')
+                    }).then(function (response) {
+                        this.result = response;
+
+                        if (response.data.redirect) {
+                            window.location.href = response.data.redirect;
+                        } else {
+                            location.reload();
+                        }
+                    }).catch(function (error) {
+                        location.reload();
+                    });
+
+                    e.preventDefault();
+                } else {
+                    e.preventDefault();
+                }
+            }
         </script>
     @endpush
 </div>

@@ -80,10 +80,12 @@ class InvoiceRepository extends Repository
     }
 
     /**
-     * @param  array  $data
+     * @param  array  $data     
+     * @param  string $invoiceState
+     * @param  string $orderState
      * @return \Webkul\Sales\Contracts\Invoice
      */
-    public function create(array $data)
+    public function create(array $data, $invoiceState = null, $orderState = null)
     {
         DB::beginTransaction();
 
@@ -93,11 +95,17 @@ class InvoiceRepository extends Repository
             $order = $this->orderRepository->find($data['order_id']);
 
             $totalQty = array_sum($data['invoice']['items']);
+            
+            if (isset($invoiceState)) {
+                $state = $invoiceState;
+            } else {
+                $state = "paid";
+            }
 
             $invoice = $this->model->create([
                 'order_id'              => $order->id,
                 'total_qty'             => $totalQty,
-                'state'                 => 'pending',
+                'state'                 => $state,
                 'base_currency_code'    => $order->base_currency_code,
                 'channel_currency_code' => $order->channel_currency_code,
                 'order_currency_code'   => $order->order_currency_code,
@@ -192,7 +200,14 @@ class InvoiceRepository extends Repository
             }
 
             $this->collectTotals($invoice);
+
             $this->orderRepository->collectTotals($order);
+
+            if (isset($orderState)) {
+                $this->orderRepository->updateOrderStatus($order, $orderState);
+            } else {
+                $this->orderRepository->updateOrderStatus($order);
+            }
 
             Event::dispatch('sales.invoice.save.after', $invoice);
         } catch (\Exception $e) {
@@ -252,22 +267,5 @@ class InvoiceRepository extends Repository
         $invoice->save();
 
         return $invoice;
-    }
-
-    /*
-     * @param \Webkul\Sales\Contracts\Invoice $invoice
-     * @return void
-     */
-    public function updateInvoiceState($invoice, $status)
-    {  
-        $invoice->state = $status;
-        $invoice->save();
-
-        if ($status == 'paid'){
-            $order = $this->orderRepository->findOrFail($invoice->order->id);
-            $this->orderRepository->updateOrderStatus($order);
-        }
-
-        return true;
     }
 }

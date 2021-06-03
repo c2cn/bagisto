@@ -9,16 +9,14 @@
     <section class="review">
 
         <div class="review-layouter">
-            @inject ('productImageHelper', 'Webkul\Product\Helpers\ProductImage')
-
             @inject ('reviewHelper', 'Webkul\Product\Helpers\Review')
 
-            <?php $productBaseImage = $productImageHelper->getProductBaseImage($product); ?>
+            <?php $productBaseImage = productimage()->getProductBaseImage($product); ?>
 
             <div class="product-info">
                 <div class="product-image">
                     <a href="{{ route('shop.productOrCategory.index', $product->url_key) }}" title="{{ $product->name }}">
-                        <img src="{{ $productBaseImage['medium_image_url'] }}" />
+                        <img src="{{ $productBaseImage['medium_image_url'] }}" alt="" />
                     </a>
                 </div>
 
@@ -106,18 +104,24 @@
 
                                 <span class="stars">
                                     @for ($i = 1; $i <= 5; $i++)
-
-                                      @if($i <= $review->rating)
-                                        <span class="icon star-icon"></span>
-                                      @else
-                                        <span class="icon star-icon-blank"></span>
-                                      @endif
-
+                                        @if ($i <= $review->rating)
+                                            <span class="icon star-icon"></span>
+                                        @else
+                                            <span class="icon star-icon-blank"></span>
+                                        @endif
                                     @endfor
                                 </span>
 
                                 <div class="message">
                                     {{ $review->comment }}
+                                </div>
+
+                                <div class="image">
+                                    @if (count($review->images) > 0)
+                                        @foreach ($review->images as $image)
+                                            <img src="{{ $image->url }}">
+                                        @endforeach
+                                    @endif
                                 </div>
 
                                 <div class="reviewer-details">

@@ -15,7 +15,8 @@ return [
     ],
 
     'common' => [
-        'error' => 'エラーが発生しました。しばらく待ってから、再度アクセスしてください。'
+        'error' => 'エラーが発生しました。しばらく待ってから、再度アクセスしてください。',
+        'image-upload-limit' => '画像の最大アップロードサイズは2MBです',
     ],
 
     'home' => [
@@ -69,7 +70,8 @@ return [
         'page-title' => '検索',
         'found-results' => '検索結果',
         'found-result' => '検索結果',
-        'analysed-keywords' => 'Analysed Keywords'
+        'analysed-keywords' => 'Analysed Keywords',
+        'image-search-option' => 'Image Search Option'
     ],
 
     'reviews' => [
@@ -249,11 +251,14 @@ return [
                     'submit' => '保存する',
                     'success' => '住所が更新されました',
                 ],
+
                 'delete' => [
                     'success' => '住所が削除されました',
                     'failure' => '住所の削除に失敗しました。',
                     'wrong-password' => 'パスワードが正しくありません'
-                ]
+                ],
+
+                'default-address' => 'Default Address',
             ],
 
             'order' => [
@@ -350,7 +355,8 @@ return [
                 'expired' => '期限切れ',
                 'remaining-downloads' => '残りのダウンロード数',
                 'unlimited' => '無制限',
-                'download-error' => 'ダウンロードリンクの有効期限が切れています.'
+                'download-error' => 'ダウンロードリンクの有効期限が切れています.',
+                'payment-error' => 'Payment has not been done for this download.'
             ],
 
             'review' => [
@@ -406,6 +412,9 @@ return [
         'available-for-order' => '注文可能',
         'settings' => 'Settings',
         'compare_options' => 'Compare Options',
+        'wishlist-options' => 'Wishlist Options',
+        'offers' => 'Buy :qty for :price each and save :discount%',
+        'tax-inclusive' => 'Inclusive of all taxes',
     ],
 
     'buynow' => [
@@ -445,12 +454,15 @@ return [
                 'success' => 'アイテムがカートに追加されました。',
                 'success-remove' => 'アイテムがカートから削除されました。',
                 'error-add' => 'アイテムをカートに追加できません。しばらくしてから再度お試し下さい。',
+                'inactive' => 'An item is inactive and was removed from cart',
+                'inactive-add' => 'Inactive item cannot be added to cart',
             ],
             'quantity-error' => 'ご希望の数量の在庫が現在ございません。',
             'cart-subtotal' => '小計',
             'cart-remove-action' => '手続きを進めますか。',
             'partial-cart-update' => 'Only some of the product(s) were updated',
-            'link-missing' => ''
+            'link-missing' => '',
+            'minimum-order-message' => 'Minimum order amount is :amount'
         ],
 
         'onepage' => [

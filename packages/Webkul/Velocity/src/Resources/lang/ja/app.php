@@ -112,7 +112,17 @@ return [
             'advertisement-three'       => '広告3つの画像',
             'images'                    => '画像',
             'general'                   => '一般的な',
-            'add-image-btn-title'       => '画像を追加'
+            'add-image-btn-title'       => '画像を追加',
+            'footer-middle' => [
+                'about-us'  => 'About Us',
+                'customer-service' => 'Customer Service',
+                'whats-new' => 'What\'s New',
+                'contact-us' => 'Contact Us',
+                'order-and-returns' => 'Order and Returns',
+                'payment-policy' => 'Payment Policy',
+                'shipping-policy' => 'Shipping Policy',
+                'privacy-and-cookies-policy' => 'Privacy and Cookies Policy'
+            ]
         ],
 
         'category'  => [
@@ -224,7 +234,10 @@ return [
             'forgot-password'       => 'パスワードをお忘れですか',
             'recover-password'      => 'パスワードを回復',
             'recover-password-text' => 'パスワードを忘れた場合は、メールアドレスを入力してパスワードを回復してください。',
-        ]
+        ],
+        'wishlist' => [
+            'remove-all-success' => 'ウィッシュリストからすべてのアイテムが削除されました',
+        ],
     ],
 
     'error'       => [
@@ -252,6 +265,7 @@ return [
         'short-description' => '短い説明',
         'recently-viewed'   => '最近見た製品',
         'be-first-review'   => '最初のレビューを書く',
+        'tax-inclusive'     => 'Inclusive of all taxes',
     ],
 
     'shop'        => [

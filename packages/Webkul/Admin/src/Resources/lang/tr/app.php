@@ -72,23 +72,33 @@ return [
         'taxes' => 'Vergiler',
         'tax-categories' => 'Vergi Kategorileri',
         'tax-rates' => 'Vergi Oranları',
+        'marketing' => 'Marketing',
         'promotions' => 'Promosyon',
+        'email-marketing' => 'Email Marketing',
+        'campaigns' => 'Campaigns',
+        'email-templates' => 'Email Templates',
         'discount' => 'İndirim',
-        'cms' => 'CMS'
+        'cms' => 'CMS',
+        'transactions' => 'Transactions'
     ],
 
     'acl' => [
         'dashboard' => 'Panel',
         'sales' => 'Satışlar',
+        'cancel' => 'Cancel',
         'orders' => 'Siparişler',
         'shipments' => 'Teslimatlar',
         'invoices' => 'Faturalar',
+        'refunds' => 'Refunds',
         'catalog' => 'Katalog',
         'products' => 'Ürünler',
+        'copy' => 'Copy',
         'categories' => 'Kategoriler',
         'attributes' => 'Nitelikler',
         'attribute-families' => 'Nitelik Grupları',
         'customers' => 'Müşteriler',
+        'addresses' => 'Addresses',
+        'note' => 'Note',
         'groups' => 'Gruplar',
         'reviews' => 'İncelemeler',
         'newsletter-subscriptions' => 'Bülten Üyelikleri',
@@ -105,9 +115,13 @@ return [
         'taxes' => 'Vergi',
         'tax-categories' => 'Vergi Grupları',
         'tax-rates' => 'Vergi Oranları',
+        'view' => 'View',
         'edit' => 'Düzenle',
         'create' => 'Oluştur',
         'delete' => 'Sil',
+        'mass-delete' => 'Mass Delete',
+        'mass-update' => 'Mass Update',
+        'marketing' => 'Marketing',
         'promotions' => 'Promosyonlar',
         'cart-rules' => 'Alışveriş Sepeti Kuralları',
         'catalog-rules' => 'Katalog Kuralları',
@@ -185,6 +199,7 @@ return [
         'shipment-date' => 'Kargo Tarihi',
         'shipment-to' => 'Kargo Bilgileri',
         'sku' => 'Barkod',
+        'product-number' => 'Ürün numarası',
         'price' => 'Fiyat',
         'qty' => 'Miktar',
         'permission-type' => 'İzin Tipi',
@@ -222,7 +237,9 @@ return [
         'view' => 'Görüntüle',
         'rtl' => 'RTL',
         'ltr' => 'LTR',
-        'update-status' => 'Durum Güncelle'
+        'update-status' => 'Durum Güncelle',
+        'transaction-id' => 'Transaction Id',
+        'transaction-date' => 'Transaction Date',
     ],
 
     'account' => [
@@ -316,14 +333,6 @@ return [
             'invoice-btn-title' => 'Fatura',
             'info' => 'Bilgi',
             'invoices' => 'Faturalar',
-            'invoices-change-title' => 'Change invoice state',
-            'invoices-change-state-desc' => 'Please select the new invoice state:',
-            'invoice-status-paid'    => 'Paid',
-            'invoice-status-pending' => 'Pending',
-            'invoice-status-overdue' => 'Overdue',
-            'invoice-status-update' => 'Save changes',
-            'invoice-status-confirmed' => 'The invoice state has been changed.',
-            'invoice-status-error' => 'Could not update the invoice state. ',
             'shipments' => 'Kargo',
             'order-and-account' => 'Sipariş ve Hesap',
             'order-info' => 'Sipariş Bilgisi',
@@ -382,13 +391,15 @@ return [
             'submit-comment' => 'Yorum Gönder',
             'notify-customer' => 'Müşteriyi Bilgilendir',
             'customer-notified' => ':date | Müşteri <b>Bilgilendirildi</b>',
-            'customer-not-notified' => ':date | Müşteri <b>Bilgilendirilmedi</b>'
+            'customer-not-notified' => ':date | Müşteri <b>Bilgilendirilmedi</b>',
+            'transactions' => 'Transactions'
         ],
 
         'invoices' => [
             'title' => 'Faturalar',
             'id' => 'ID',
             'invoice-id' => 'Fatura No',
+            'invoice' => 'Fatura',
             'date' => 'Fatura Tarihi',
             'order-id' => 'Sipariş No',
             'customer-name' => 'Müşteri Adı',
@@ -406,7 +417,10 @@ return [
             'print' => 'Yazdır',
             'order-date' => 'Sipariş Tarihi',
             'creation-error' => 'Fatura oluşturulmasına izin verilmedi.',
-            'product-error' => 'Fatura oluşturulması için ürün ekleyiniz.'
+            'product-error' => 'Fatura oluşturulması için ürün ekleyiniz.',
+            'status-overdue' => 'Overdue',
+            'status-pending' => 'Pending Payment',
+            'status-paid'    => 'Paid',
         ],
 
         'shipments' => [
@@ -458,6 +472,20 @@ return [
             'view-title' => 'İade #:refund_id',
             'invalid-refund-amount-error' => 'Lütfen iade miktarını giriniz.'
 
+        ],
+
+        'transactions' => [
+            'title'               => 'Transactions',
+            'id'                  => 'Id',
+            'transaction-id'      => 'Transaction Id',
+            'payment-method'      => 'Payment method',
+            'action'              => 'Action',
+            'view-title'          => 'Transaction #:transaction_id',
+            'transaction-data'    => 'Transaction Data',
+            'order-id'            => 'Order Id',
+            'status'              => 'Status',
+            'created-at'          => 'Created At',
+            'transaction-details' => 'Transaction Details'
         ]
     ],
 
@@ -529,7 +557,13 @@ return [
             'checkbox' => 'Onay Kutusu',
             'multiselect' => 'Çoklu Seçim',
             'new-option' => 'Yeni Seçenek',
-            'is-default' => 'Varsayılan'
+            'is-default' => 'Varsayılan',
+            'remove-image-btn-title' => 'Remove Image',
+            'videos' => 'Videos',
+            'video' => 'Video',
+            'add-video-btn-title' => 'Add Video',
+            'remove-video-btn-title' => 'Remove Video',
+            'not-support-video' => 'Your browser does not support the video tag.',
         ],
 
         'attributes' => [
@@ -802,7 +836,9 @@ return [
             'seo-title' => 'Meta Başlık',
             'seo-description' => 'Meta Açıklama',
             'seo-keywords' => 'Meta Anahtar Kelimeler',
-
+            'maintenance-mode' => 'Maintenance Mode',
+            'maintenance-mode-text' => 'Message',
+            'allowed-ips' => 'Allowed IPs'
         ],
 
         'sliders' => [
@@ -820,7 +856,9 @@ return [
             'update-success' => 'Slider başarıyla güncellendi.',
             'update-fail' => 'Slider güncellenemez.',
             'delete-success' => 'Slider başarıyla silindi.',
-            'delete-fail' => 'Slider silinirken hata oluştu.'
+            'delete-fail' => 'Slider silinirken hata oluştu.',
+            'expired-at'  => 'Expire Date',
+            'sort-order'  => 'Sort Order'
         ],
 
         'tax-categories' => [
@@ -1115,6 +1153,68 @@ return [
         ]
     ],
 
+    'marketing' => [
+        'templates' => [
+            'title' => 'Email Templates',
+            'add-title' => 'Add Email Template',
+            'edit-title' => 'Edit Email Template',
+            'save-btn-title' => 'Save',
+            'general' => 'General',
+            'name' => 'Name',
+            'status' => 'Status',
+            'active' => 'Active',
+            'inactive' => 'Inactive',
+            'draft' => 'Draft',
+            'content' => 'Content',
+            'create-success' => 'Email template created successfully.',
+            'update-success' => 'Email template updated successfully.',
+            'delete-success' => 'Email template deleted successfully',
+        ],
+
+        'campaigns' => [
+            'title' => 'Campaigns',
+            'add-title' => 'Add Campaign',
+            'edit-title' => 'Edit Campaign',
+            'save-btn-title' => 'Save',
+            'general' => 'General',
+            'name' => 'Name',
+            'status' => 'Status',
+            'active' => 'Active',
+            'inactive' => 'Inactive',
+            'subject' => 'Subject',
+            'email-template' => 'Email Template',
+            'audience' => 'Audience',
+            'channel' => 'Channel',
+            'customer-group' => 'Customer Group',
+            'schedule' => 'Schedule',
+            'schedule-type' => 'Schedule Type',
+            'once' => 'Once',
+            'events' => 'Events',
+            'schedule-date' => 'Schedule Date',
+            'spooling' => 'Spooling',
+            'event' => 'Event',
+            'birthday' => 'Birthday',
+            'create-success' => 'Campaign created successfully.',
+            'update-success' => 'Campaign updated successfully.',
+            'delete-success' => 'Campaign deleted successfully',
+        ],
+
+        'events' => [
+            'title' => 'Events',
+            'add-title' => 'Add Event',
+            'edit-title' => 'Edit Event',
+            'save-btn-title' => 'Save',
+            'general' => 'General',
+            'name' => 'Name',
+            'description' => 'Description',
+            'date' => 'Date',
+            'create-success' => 'Event created successfully.',
+            'update-success' => 'Event updated successfully.',
+            'delete-success' => 'Event deleted successfully.',
+            'edit-error' => 'Can not edit this event.'
+        ]
+    ],
+
     'error' => [
         'go-to-home' => 'ANA SAYFAYA GİT',
         'in-maitainace' => 'Bakım Modunda',
@@ -1244,6 +1344,10 @@ return [
         ],
         'system' => [
             'catalog' => 'Katalog',
+            'homepage' => 'Homepage configuration',
+            'allow-no-of-new-product-homepage' => 'Allowed No of New Product in Homepage',
+            'allow-no-of-featured-product-homepage' => 'Allowed No of Featured Product in Homepage',
+            'allow-out-of-stock-items' => 'Allow out of stock items',
             'products' => 'Ürünler',
             'guest-checkout' => 'Ziyaretçi Satışı',
             'allow-guest-checkout' => 'Ziyaretçi Alımına İzin Ver',
@@ -1272,11 +1376,12 @@ return [
             'description' => 'Açıklama',
             'rate' => 'Oran',
             'status' => 'Durum',
+            'calculate-tax' => 'Vergiyi Hesapla',
             'type' => 'Tipi',
             'payment-methods' => 'Ödeme Türleri',
             'cash-on-delivery' => 'Kapıda Ödeme',
             'money-transfer' => 'Havale/EFT',
-            'paypal-standard' => 'Paypal',
+            'paypal-standard' => 'PayPal',
             'business-account' => 'İş Hesabı',
             'newsletter' => 'Bülten Aboneliği',
             'newsletter-subscription' => 'Bülten Aboneliğine İzin Ver',
@@ -1292,9 +1397,13 @@ return [
             'weight-unit' => 'Ağırlık Birimi',
             'email-settings'    => 'Mail Ayarları',
             'email-sender-name' => 'Mail Gönderici Adı',
+            'email-sender-name-tip' => 'This name will be displayed in the customers inbox',
             'shop-email-from'   => 'Mağaza Mail Adresi [Mail gönderimleri için]',
+            'shop-email-from-tip' => 'The email address of this channel to send emails to your customers',
             'admin-name'    => 'Yönetici Adı',
+            'admin-name-tip' => 'This name will be displayed in all admin emails',
             'admin-email' => 'Yönetici Mail Adresi',
+            'admin-email-tip' => 'The email address of the admin for this channel to receive emails',
             'admin-page-limit' => 'Sayfa Başına Varsayılan İçerik (Yönetici)',
             'design' => 'Tasarım',
             'admin-logo' => 'Panel Logo',
@@ -1308,6 +1417,8 @@ return [
             'order-number-length' => 'Numara Uzunluğu',
             'order-number-suffix' => 'Numara Son Eki',
             'order-number-generator-class' => 'Sipariş Numarası Üreticisi',
+            'minimum-order' => 'Minimum Order Settings',
+            'minimum-order-amount' => 'Minimum Order Amount',
             'default' => 'Varsayılan',
             'sandbox' => 'Havuz',
             'all-channels' => 'Tümü',
@@ -1339,7 +1450,29 @@ return [
             'show-offers' => 'Teklifleri Göster',
             'show-sku' => 'Barkod Göster',
             'categories' => 'Kategoriler',
-            'show-search-input-field' => 'Arama Giriş Kutusu Göster'
+            'show-search-input-field' => 'Arama Giriş Kutusu Göster',
+            'store-name' => 'Dükkan adı',
+            'vat-number' => 'KDV Numarası',
+            'contact-number' => 'İletişim numarası',
+            'bank-details' => 'Banka detayları',
+            'mailing-address' => 'Send Check to',
+            'instructions' => 'Instructions',
+            'custom-scripts' => 'Custom Scripts',
+            'custom-css' => 'Custom CSS',
+            'custom-javascript' => 'Custom Javascript',
+            'paypal-smart-button' => 'PayPal',
+            'client-id' => 'Client Id',
+            'client-id-info' => 'Use "sb" for testing.',
+            'client-secret' => 'Client Secret',
+            'client-secret-info' => 'Add your secret key here',
+            'accepted-currencies' => 'Accepted currencies',
+            'accepted-currencies-info' => 'Add currency code comma seperated e.g. USD,INR,...',
+            'buy-now-button-display' => 'Allow customers to directly buy products',
+            'width' => 'Width',
+            'height' => 'Height',
+            'cache-small-image' => 'Small Image',
+            'cache-medium-image' => 'Medium Image',
+            'cache-large-image' => 'Large Image',
         ]
     ]
 ];

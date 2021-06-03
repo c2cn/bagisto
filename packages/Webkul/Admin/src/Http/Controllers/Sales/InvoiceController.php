@@ -2,13 +2,10 @@
 
 namespace Webkul\Admin\Http\Controllers\Sales;
 
-use Illuminate\Http\Request;
-
+use PDF;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Sales\Repositories\OrderRepository;
 use Webkul\Sales\Repositories\InvoiceRepository;
-
-use PDF;
 
 class InvoiceController extends Controller
 {
@@ -144,28 +141,30 @@ class InvoiceController extends Controller
     {
         $invoice = $this->invoiceRepository->findOrFail($id);
 
-        $pdf = PDF::loadView('admin::sales.invoices.pdf', compact('invoice'))->setPaper('a4');
+        $html = view('admin::sales.invoices.pdf', compact('invoice'))->render();
 
-        return $pdf->download('invoice-' . $invoice->created_at->format('d-m-Y') . '.pdf');
+        return PDF::loadHTML($this->adjustArabicAndPersianContent($html))
+            ->setPaper('a4')
+            ->download('invoice-' . $invoice->created_at->format('d-m-Y') . '.pdf');
     }
 
     /**
-     * Update the invoice state.
+     * Adjust arabic and persian content.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  string  $html
+     * @return string
      */
-    public function updateState($id, Request $request)
+    private function adjustArabicAndPersianContent($html)
     {
-        $invoice = $this->invoiceRepository->findOrFail($id);
-        $task = $this->invoiceRepository->updateInvoiceState($invoice, $request->state);
+        $arabic = new \ArPHP\I18N\Arabic();
 
-        if ($task){
-            session()->flash('success', trans('admin::app.sales.orders.invoice-status-confirmed'));
-        } else {
-            session()->flash('success', trans('admin::app.sales.orders.invoice-status-error'));
+        $p = $arabic->arIdentify($html);
+
+        for ($i = count($p)-1; $i >= 0; $i -= 2) {
+            $utf8ar = $arabic->utf8Glyphs(substr($html, $p[$i-1], $p[$i] - $p[$i-1]));
+            $html   = substr_replace($html, $utf8ar, $p[$i-1], $p[$i] - $p[$i-1]);
         }
 
-        return back();
+        return $html;
     }
 }

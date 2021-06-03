@@ -99,11 +99,11 @@ class ProductFlat extends Model implements ProductFlatContract
     }
 
     /**
-     * @param integer $qty
+     * @param int $qty
      *
      * @return bool
      */
-    public function haveSufficientQuantity($qty)
+    public function haveSufficientQuantity(int $qty): bool
     {
         return $this->product->haveSufficientQuantity($qty);
     }
@@ -121,9 +121,15 @@ class ProductFlat extends Model implements ProductFlatContract
      */
     public function images()
     {
-        return (ProductImageProxy::modelClass())
-            ::where('product_images.product_id', $this->product_id)
-            ->select('product_images.*');
+        return $this->hasMany(ProductImageProxy::modelClass(), 'product_id', 'product_id');
+    }
+
+    /**
+     * The videos that belong to the product.
+     */
+    public function videos()
+    {
+        return $this->product->videos();
     }
 
     /**
@@ -198,6 +204,16 @@ class ProductFlat extends Model implements ProductFlatContract
     public function grouped_products()
     {
         return $this->product->grouped_products();
+    }
+
+    /**
+     * Get the grouped products by `sort_order` key that owns the product.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function groupedProductsBySortOrder()
+    {
+        return $this->product->grouped_products()->orderBy('sort_order');
     }
 
     /**

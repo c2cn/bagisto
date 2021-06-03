@@ -111,7 +111,17 @@ return [
             'advertisement-three' => 'Anúncio Três Imagens',
             'images' => 'Imagens',
             'general' => 'Geral',
-            'add-image-btn-title' => 'Add Imagem'
+            'add-image-btn-title' => 'Add Imagem',
+            'footer-middle' => [
+                'about-us'  => 'About Us',
+                'customer-service' => 'Customer Service',
+                'whats-new' => 'What\'s New',
+                'contact-us' => 'Contact Us',
+                'order-and-returns' => 'Order and Returns',
+                'payment-policy' => 'Payment Policy',
+                'shipping-policy' => 'Shipping Policy',
+                'privacy-and-cookies-policy' => 'Privacy and Cookies Policy'
+            ]
         ],
         'category' => [
             'save-btn-title' => 'Salvar Menu',
@@ -225,7 +235,10 @@ return [
             'forgot-password' => 'Esqueceu a senha',
             'recover-password' => 'Recuperar Senha',
             'recover-password-text' => 'Se você esqueceu sua senha, recupere-a digitando seu endereço de e-mail.',
-        ]
+        ],
+        'wishlist' => [
+            'remove-all-success' => 'Todos os itens da sua lista de desejos foram removidos',
+        ],
     ],
 
     'error' => [
@@ -253,6 +266,7 @@ return [
         'view-all-reviews' => 'Ver todos os comentários',
         'recently-viewed' => 'Produtos vistos recentemente',
         'be-first-review' => 'Seja o primeiro a escrever um comentário',
+        'tax-inclusive' => 'Inclusive of all taxes',
     ],
 
     'shop' => [

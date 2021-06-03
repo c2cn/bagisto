@@ -24,7 +24,11 @@ class CartController extends Controller
             $cartItems = $items->toArray();
 
             $cartDetails = [];
+            $cartDetails['base_grand_total'] = core()->currency($cart->base_grand_total);
             $cartDetails['base_sub_total'] = core()->currency($cart->base_sub_total);
+
+            /* needed raw data for comparison */
+            $cartDetails['raw']['base_sub_total'] = $cart->base_sub_total;
 
             foreach ($items as $index => $item) {
                 $images = $item->product->getTypeInstance()->getBaseImage($item);
@@ -32,6 +36,7 @@ class CartController extends Controller
                 $cartItems[$index]['images'] = $images;
                 $cartItems[$index]['url_key'] = $item->product->url_key;
                 $cartItems[$index]['base_total'] = core()->currency($item->base_total);
+                $cartItems[$index]['base_total_with_tax'] = core()->currency($item->base_total + $item->tax_amount);
             }
 
             $response = [
@@ -92,6 +97,9 @@ class CartController extends Controller
                 }
             }
         } catch(\Exception $exception) {
+
+            session()->flash('warning', __($exception->getMessage()));
+
             $product = $this->productRepository->find($id);
 
             Log::error('Velocity CartController: ' . $exception->getMessage(),

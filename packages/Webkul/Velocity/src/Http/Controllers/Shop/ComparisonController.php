@@ -2,60 +2,55 @@
 
 namespace Webkul\Velocity\Http\Controllers\Shop;
 
-use Webkul\Velocity\Helpers\Helper;
-use Webkul\Product\Repositories\ProductRepository;
-use Webkul\Velocity\Repositories\VelocityCustomerCompareProductRepository as CustomerCompareProductRepository;
-
 class ComparisonController extends Controller
 {
     /**
-     * function for customers to get products in comparison.
+     * Method for customers to get products in comparison.
      *
      * @return \Illuminate\Http\Response|\Illuminate\View\View
      */
     public function getComparisonList()
     {
-        if (request()->get('data')) {
-            $productSlugs = null;
+        if (! core()->getConfigData('general.content.shop.compare_option')) {
+            abort(404);
+        } else {
+            if (request()->get('data')) {
+                $productCollection = [];
 
-            $productCollection = [];
+                if (auth()->guard('customer')->user()) {
+                    $productCollection = $this->compareProductsRepository
+                        ->leftJoin(
+                            'product_flat',
+                            'velocity_customer_compare_products.product_flat_id',
+                            'product_flat.id'
+                        )
+                        ->where('customer_id', auth()->guard('customer')->user()->id)
+                        ->get();
 
-            if (auth()->guard('customer')->user()) {
-                $productCollection = $this->compareProductsRepository
-                    ->leftJoin(
-                        'product_flat',
-                        'velocity_customer_compare_products.product_flat_id',
-                        'product_flat.id'
-                    )
-                    ->where('customer_id', auth()->guard('customer')->user()->id)
-                    ->get()
-                    ->toArray();
+                    $items = $productCollection->map(function ($product) {
+                        return $product->id;
+                    })->join('&');
 
-                $items = [];
-
-                foreach ($productCollection as $index => $customerCompare) {
-                    array_push($items, $customerCompare['id']);
+                    $productCollection = ! empty($items)
+                        ? $this->velocityHelper->fetchProductCollection($items)
+                        : [];
+                } else {
+                    /* for product details */
+                    if ($items = request()->get('items')) {
+                        $productCollection = $this->velocityHelper->fetchProductCollection($items);
+                    }
                 }
 
-                $items = implode('&', $items);
-                $productCollection = $this->velocityHelper->fetchProductCollection($items);
-
+                $response = [
+                    'status'   => 'success',
+                    'products' => $productCollection,
+                ];
             } else {
-                // for product details
-                if ($items = request()->get('items')) {
-                    $productCollection = $this->velocityHelper->fetchProductCollection($items);
-                }
+                $response = view($this->_config['view']);
             }
 
-            $response = [
-                'status'   => 'success',
-                'products' => $productCollection,
-            ];
-        } else {
-            $response = view($this->_config['view']);
+            return $response;
         }
-
-        return $response;
     }
 
     /**

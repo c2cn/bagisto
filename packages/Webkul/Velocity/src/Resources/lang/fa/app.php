@@ -99,7 +99,7 @@ return [
             'sidebar-categories' => 'دسته بندی های نوار کناری',
             'header_content_count' => 'Header Content Count',
             'footer-left-raw-content' => '<p>ما دوست داریم که نرم افزارهایی را تهیه کرده و مشکلات دنیای واقعی را با باینری حل کنیم. ما به اهداف خود بسیار متعهد هستیم. ما منابع خود را برای ایجاد کلاس های نرم افزاری و برنامه های کاربردی برای تجارت سازمانی با درجه برتر ، در لبه تخصص فناوری سرمایه گذاری می کنیم..</p>',
-            'slider-path' => 'مسیر کشویی',
+            'slider-path' => 'مسیر اسلاید',
             'category-logo' => 'آرم دسته',
             'product-policy' => 'خط مشی محصول',
             'update-meta-data' => 'Meta Data به روز رسانی',
@@ -111,7 +111,17 @@ return [
             'advertisement-three' => 'تبلیغات سه تصویر',
             'images' => 'تصاویر',
             'general' => 'عمومی',
-            'add-image-btn-title' => 'تصویر اضافه کن'
+            'add-image-btn-title' => 'تصویر اضافه کن',
+            'footer-middle' => [
+                'about-us'  => 'About Us',
+                'customer-service' => 'Customer Service',
+                'whats-new' => 'What\'s New',
+                'contact-us' => 'Contact Us',
+                'order-and-returns' => 'Order and Returns',
+                'payment-policy' => 'Payment Policy',
+                'shipping-policy' => 'Shipping Policy',
+                'privacy-and-cookies-policy' => 'Privacy and Cookies Policy'
+            ]
         ],
         'category' => [
             'save-btn-title' => 'ذخیره منو',
@@ -138,7 +148,7 @@ return [
             'mass-delete-success' => 'منوی دسته انتخاب شده با موفقیت حذف شد.',
         ],
         'general' => [
-            'locale_logo' => 'لوگوی محلی',
+            'locale_logo' => 'لوگوی منطقه',
         ],
     ],
 
@@ -154,8 +164,7 @@ return [
 
     'header' => [
         'cart' => 'سبد خرید',
-        'cart' => 'سبد خرید',
-        'guest' => 'مهمان',
+         'guest' => 'مهمان',
         'logout' => 'خروج',
         'title' => 'حساب',
         'account' => 'حساب',
@@ -223,7 +232,10 @@ return [
             'forgot-password' => 'رمز عبور را فراموش کرده اید',
             'recover-password' => 'بازیابی رمز عبور',
             'recover-password-text' => 'اگر رمز عبور خود را فراموش کرده اید ، با وارد کردن آدرس ایمیل خود آن را بازیابی کنید.',
-        ]
+        ],
+        'wishlist' => [
+            'remove-all-success' => 'همه موارد لیست دلخواه شما حذف شده است',
+        ],
     ],
 
     'error' => [
@@ -251,6 +263,7 @@ return [
         'short-description' => 'توضیحات کوتاه',
         'recently-viewed' => 'محصولات اخیرا مشاهده شده',
         'be-first-review' => 'اولین نفری باشید که نظر می دهد',
+        'tax-inclusive' => 'Inclusive of all taxes',
     ],
 
     'shop' => [

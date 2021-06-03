@@ -111,7 +111,17 @@ return [
             'advertisement-three' => 'Advertisement Three Images',
             'images' => 'Images',
             'general' => 'General',
-            'add-image-btn-title' => 'Add Image'
+            'add-image-btn-title' => 'Add Image',
+            'footer-middle' => [
+                'about-us'  => 'About Us',
+                'customer-service' => 'Customer Service',
+                'whats-new' => 'What\'s New',
+                'contact-us' => 'Contact Us',
+                'order-and-returns' => 'Order and Returns',
+                'payment-policy' => 'Payment Policy',
+                'shipping-policy' => 'Shipping Policy',
+                'privacy-and-cookies-policy' => 'Privacy and Cookies Policy'
+            ]
         ],
         'category' => [
             'save-btn-title' => 'Save Menu',
@@ -223,7 +233,10 @@ return [
             'forgot-password' => 'Forgot Password',
             'recover-password' => 'Recover Password',
             'recover-password-text' => 'Als u uw wachtwoord bent vergeten, kan u dit herstellen door uw e-mailadres in te voeren..',
-        ]
+        ],
+        'wishlist' => [
+            'remove-all-success' => 'Alle items van je verlanglijst zijn verwijderd',
+        ],
     ],
 
     'error' => [
@@ -251,6 +264,7 @@ return [
         'short-description' => 'Korte omschrijving',
         'recently-viewed' => 'Recent bekeken producten',
         'be-first-review' => 'Wees de eerste om een review te schrijven.',
+        'tax-inclusive' => 'Inclusive of all taxes',
     ],
 
     'shop' => [

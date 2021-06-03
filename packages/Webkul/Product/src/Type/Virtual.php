@@ -9,11 +9,11 @@ class Virtual extends AbstractType
      *
      * @var array
      */
-    protected $skipAttributes = ['width', 'height', 'depth', 'weight'];
+    protected $skipAttributes = ['length', 'width', 'height', 'weight'];
 
     /**
      * These blade files will be included in product edit page
-     * 
+     *
      * @var array
      */
     protected $additionalViews = [
@@ -22,6 +22,7 @@ class Virtual extends AbstractType
         'admin::catalog.products.accordians.categories',
         'admin::catalog.products.accordians.channels',
         'admin::catalog.products.accordians.product-links',
+        'admin::catalog.products.accordians.videos',
     ];
 
     /**
@@ -49,6 +50,11 @@ class Virtual extends AbstractType
             return false;
         }
 
+        if (is_callable(config('products.isSaleable')) &&
+            call_user_func(config('products.isSaleable'), $this->product) === false) {
+            return false;
+        }
+
         if ($this->haveSufficientQuantity(1)) {
             return true;
         }
@@ -57,11 +63,22 @@ class Virtual extends AbstractType
     }
 
     /**
-     * @param  int  $qty
+     * @param int $qty
+     *
      * @return bool
      */
-    public function haveSufficientQuantity($qty)
+    public function haveSufficientQuantity(int $qty): bool
     {
         return $qty <= $this->totalQuantity() ? true : false;
+    }
+
+    /**
+     * Get product maximam price
+     *
+     * @return float
+     */
+    public function getMaximamPrice()
+    {
+        return $this->product->price;
     }
 }

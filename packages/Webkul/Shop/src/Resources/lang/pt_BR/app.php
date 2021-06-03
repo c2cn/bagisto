@@ -17,6 +17,7 @@ return [
 
     'common' => [
         'error' => 'Algo deu errado, por favor, tente novamente mais tarde.',
+        'image-upload-limit' => 'O tamanho máximo de upload da imagem é 2 MB',
         'no-result-found' => 'We could not find any records.'
     ],
 
@@ -72,7 +73,8 @@ return [
         'page-title' => 'Buscar',
         'found-results' => 'Resultados da pesquisa encontrados',
         'found-result' => 'Resultado da pesquisa encontrado',
-        'analysed-keywords' => 'Analysed Keywords'
+        'analysed-keywords' => 'Analysed Keywords',
+        'image-search-option' => 'Image Search Option'
     ],
 
     'reviews' => [
@@ -254,11 +256,14 @@ return [
                     'submit' => 'Salvar Endereço',
                     'success' => 'Endereço Atualizado com sucesso.'
                 ],
+
                 'delete' => [
                     'success' => 'Endereço Excluído com sucesso',
                     'failure' => 'Endereço não pode ser adicionado',
                     'wrong-password' => 'Wrong Password !'
-                ]
+                ],
+
+                'default-address' => 'Default Address',
             ],
 
             'order' => [
@@ -364,7 +369,8 @@ return [
                 'expired' => 'Expirado',
                 'remaining-downloads' => 'Downloads restantes',
                 'unlimited' => 'Ilimitado',
-                'download-error' => 'O link para download expirou.'
+                'download-error' => 'O link para download expirou.',
+                'payment-error' => 'Payment has not been done for this download.'
             ],
 
             'review' => [
@@ -427,6 +433,9 @@ return [
         'available-for-order' => 'Disponível para encomenda',
         'settings' => 'Settings',
         'compare_options' => 'Compare Options',
+        'wishlist-options' => 'Wishlist Options',
+        'offers' => 'Buy :qty for :price each and save :discount%',
+        'tax-inclusive' => 'Inclusive of all taxes',
     ],
 
     // 'reviews' => [
@@ -473,6 +482,8 @@ return [
                 'success' => 'Item foi adicionado com sucesso ao carrinho',
                 'success-remove' => 'Item foi removido com sucesso do carrinho',
                 'error-add' => 'Item não pode ser adicionado ao carrinho, por favor, tente novamente mais tarde',
+                'inactive' => 'An item is inactive and was removed from cart',
+                'inactive-add' => 'Inactive item cannot be added to cart',
             ],
             'quantity-error' => 'Quantidade solicitada não está disponível',
             'cart-subtotal' => 'Subtotal do carrinho',
@@ -481,7 +492,8 @@ return [
             'link-missing' => '',
             'event' => [
                 'expired' => 'This event has been expired.'
-            ]
+            ],
+            'minimum-order-message' => 'Minimum order amount is :amount'
         ],
 
         'onepage' => [

@@ -43,30 +43,37 @@
                         <div class="action">
                             @foreach ($actions as $action)
                                 @php
-                                    $toDisplay = (isset($action['condition']) && gettype($action['condition']) == 'object') ? $action['condition']() : true;
+                                    $toDisplay = (isset($action['condition']) && gettype($action['condition']) == 'object') ? $action['condition']($record) : true;
                                 @endphp
 
                                 @if ($toDisplay)
                                     <a
-                                    @if ($action['method'] == 'GET')
-                                        href="{{ route($action['route'], $record->{$action['index'] ?? $index}) }}"
-                                    @endif
+                                        id="{{ $record->{$action['index'] ?? $index} }}"
 
-                                    @if ($action['method'] != 'GET')
-                                        v-on:click="doAction($event)"
-                                    @endif
+                                        @if ($action['method'] == 'GET')
+                                            href="{{ route($action['route'], $record->{$action['index'] ?? $index}) }}"
+                                        @endif
 
-                                    data-method="{{ $action['method'] }}"
-                                    data-action="{{ route($action['route'], $record->{$index}) }}"
-                                    data-token="{{ csrf_token() }}"
+                                        @if ($action['method'] != 'GET')
+                                            @if (isset($action['function']))
+                                                v-on:click="{{$action['function']}}"
+                                            @else
+                                                v-on:click="doAction($event)"
+                                            @endif
+                                        @endif
 
-                                    @if (isset($action['target']))
-                                        target="{{ $action['target'] }}"
-                                    @endif
+                                        data-method="{{ $action['method'] }}"
+                                        data-action="{{ route($action['route'], $record->{$index}) }}"
+                                        data-token="{{ csrf_token() }}"
 
-                                    @if (isset($action['title']))
-                                        title="{{ $action['title'] }}"
-                                    @endif>
+                                        @if (isset($action['target']))
+                                            target="{{ $action['target'] }}"
+                                        @endif
+
+                                        @if (isset($action['title']))
+                                            title="{{ $action['title'] }}"
+                                        @endif
+                                    >
                                         <span class="{{ $action['icon'] }}"></span>
                                     </a>
                                 @endif
